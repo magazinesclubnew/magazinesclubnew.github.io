@@ -1,0 +1,33 @@
+---
+layout: default
+---
+<div class="home">
+  <h1 class="sr-only">{{ site.title }} - {{ site.description }}</h1>
+  <section class="cards-section">
+    <div class="section-header">
+      <span class="section-title">最新文章</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="cards-grid">
+      {% for post in site.posts %}
+      <article class="card animate-fade-in-up" style="opacity: 0; animation-delay: {{ forloop.index | times: 0.08 }}s;">
+        <a href="{{ post.url | relative_url }}" class="card-link">
+          {% if post.tags.size > 0 %}
+          <span class="card-tag">{{ post.tags | first }}</span>
+          {% endif %}
+          <h2 class="card-title">{{ post.title }}</h2>
+          {% if post.subtitle %}
+          <p class="card-subtitle">{{ post.subtitle }}</p>
+          {% endif %}
+          {% if post.excerpt %}
+          <p class="card-excerpt">{{ post.excerpt | strip_html | truncate: 150 }}</p>
+          {% endif %}
+          <time class="card-date" datetime="{{ post.date | date_to_xmlschema }}">
+            {{ post.date | date: "%Y年%-m月%-d日" }}
+          </time>
+        </a>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+</div>

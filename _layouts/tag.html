@@ -1,0 +1,31 @@
+---
+layout: default
+---
+<div class="tag-page">
+  <header class="tag-header">
+    <h1 class="tag-title">{{ page.tag }}</h1>
+    <p class="tag-count">共 {{ site.tags[page.tag].size }} 篇文章</p>
+  </header>
+
+  <section class="posts-list">
+    {% assign posts = site.tags[page.tag] %}
+    {% for post in posts %}
+    <article class="post-item">
+      <a href="{{ post.url | relative_url }}" class="post-link">
+        <div class="post-meta">
+          <time class="post-date" datetime="{{ post.date | date_to_xmlschema }}">
+            {{ post.date | date: "%Y.%m.%d" }}
+          </time>
+        </div>
+        <h2 class="post-title">{{ post.title }}</h2>
+        {% if post.subtitle %}
+        <p class="post-subtitle">{{ post.subtitle }}</p>
+        {% endif %}
+        {% if post.excerpt %}
+        <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
+        {% endif %}
+      </a>
+    </article>
+    {% endfor %}
+  </section>
+</div>

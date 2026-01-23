@@ -1,0 +1,123 @@
+---
+layout: default
+---
+<div class="reading-progress-bar"></div>
+<article class="article">
+  <header class="article-header">
+    <time class="article-date" datetime="{{ page.date | date_to_xmlschema }}">
+      {{ page.date | date: "%Y年%-m月%-d日" }}
+    </time>
+    <h1 class="article-title">{{ page.title }}</h1>
+    {% if page.subtitle %}
+    <p class="article-subtitle">{{ page.subtitle }}</p>
+    {% endif %}
+    {% if page.tags.size > 0 %}
+    <div class="article-tags">
+      {% for tag in page.tags %}
+      <a href="{{ '/tags/' | append: tag | append: '/' | relative_url }}" class="tag">{{ tag }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="article-meta">
+      <span class="view-count"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> <span id="busuanzi_value_page_pv">--</span> 次阅读</span>
+    </div>
+  </header>
+
+  <div class="article-content prose">
+    {{ content }}
+  </div>
+
+  <!-- Social Sharing -->
+  <div class="share-section">
+    <span class="share-label">分享到</span>
+    <div class="share-buttons">
+      <a href="https://twitter.com/intent/tweet?text={{ page.title | url_encode }}&url={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener" class="share-btn twitter" aria-label="分享到 Twitter">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener" class="share-btn facebook" aria-label="分享到 Facebook">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="https://service.weibo.com/share/share.php?url={{ page.url | absolute_url | url_encode }}&title={{ page.title | url_encode }}" target="_blank" rel="noopener" class="share-btn weibo" aria-label="分享到微博">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443zM9.05 17.219c-.384.616-1.208.884-1.829.602-.612-.279-.793-.991-.406-1.593.379-.595 1.176-.861 1.793-.601.622.263.82.972.442 1.592zm1.27-1.627c-.141.237-.449.353-.689.253-.236-.09-.313-.361-.177-.586.138-.227.436-.346.672-.24.239.09.315.36.194.573zm.176-2.719c-1.893-.493-4.033.45-4.857 2.118-.836 1.704-.026 3.591 1.886 4.21 1.983.64 4.318-.341 5.132-2.179.8-1.793-.201-3.642-2.161-4.149zm7.563-1.224c-.346-.105-.579-.18-.405-.649.381-1.017.422-1.896-.001-2.521-.791-1.163-2.956-1.098-5.449-.034 0 0-.779.34-.58-.271.387-1.217.325-2.236-.275-2.823-.812-.791-2.979-.279-4.846 1.127-1.386 1.043-2.197 2.165-2.197 3.131 0 .929.597 1.563 1.574 1.774 2.071.447 4.832-.223 6.583-1.659.167-.138.323-.043.15.17-.685.849-1.492 1.372-2.266 1.663.638.116 1.35.127 2.139-.058 1.619-.381 2.881-1.533 2.881-1.533.218-.185.328-.084.164.139-.653.889-1.535 1.526-2.5 1.914.875.071 1.776.002 2.693-.243 3.249-.867 5.321-3.103 5.321-5.696 0-.159 0-.32-.011-.479-.413.24-.9.444-1.444.6z"/></svg>
+      </a>
+      <button class="share-btn copy-link" onclick="copyLink()" aria-label="复制链接">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Related Posts -->
+  {% assign related_posts = "" | split: "" %}
+  {% for tag in page.tags %}
+    {% for post in site.tags[tag] %}
+      {% if post.url != page.url %}
+        {% unless related_posts contains post %}
+          {% assign related_posts = related_posts | push: post %}
+        {% endunless %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+  {% assign related_posts = related_posts | slice: 0, 3 %}
+
+  {% if related_posts.size > 0 %}
+  <div class="related-posts">
+    <h3 class="related-title">相关文章</h3>
+    <div class="related-list">
+      {% for post in related_posts %}
+      <a href="{{ post.url | relative_url }}" class="related-item">
+        <span class="related-item-title">{{ post.title }}</span>
+        {% if post.subtitle %}<span class="related-item-subtitle">{{ post.subtitle }}</span>{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <footer class="article-footer">
+    {% if page.previous.url %}
+    <a href="{{ page.previous.url | relative_url }}" class="nav-link prev">
+      <span class="nav-label">上一篇</span>
+      <span class="nav-title">{{ page.previous.title }}</span>
+    </a>
+    {% endif %}
+    {% if page.next.url %}
+    <a href="{{ page.next.url | relative_url }}" class="nav-link next">
+      <span class="nav-label">下一篇</span>
+      <span class="nav-title">{{ page.next.title }}</span>
+    </a>
+    {% endif %}
+  </footer>
+</article>
+
+<script>
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const btn = document.querySelector('.copy-link');
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 2000);
+  });
+}
+
+// Reading progress bar
+(function() {
+  const progressBar = document.querySelector('.reading-progress-bar');
+  const article = document.querySelector('.article');
+
+  function updateProgress() {
+    const articleRect = article.getBoundingClientRect();
+    const articleTop = articleRect.top + window.scrollY;
+    const articleHeight = article.offsetHeight;
+    const windowHeight = window.innerHeight;
+    const scrollY = window.scrollY;
+
+    const start = articleTop;
+    const end = articleTop + articleHeight - windowHeight;
+    const progress = Math.min(Math.max((scrollY - start) / (end - start), 0), 1);
+
+    progressBar.style.transform = `scaleX(${progress})`;
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+})();
+</script>

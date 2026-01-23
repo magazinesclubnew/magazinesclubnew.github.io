@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="{{ '/assets/images/favicon.png' | relative_url }}">
+  {% seo %}
+
+  <!-- Fonts: Noto Serif SC (editorial) + Noto Sans SC (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX for Math -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false}
+      ]
+    });"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: { preflight: false }
+    }
+  </script>
+
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+  {% feed_meta %}
+
+  <!-- Busuanzi 访问统计 -->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <!-- Cookie Consent & Analytics -->
+  <script>
+    function loadClarity() {
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "v6h4142fqg");
+    }
+
+    function acceptCookies() {
+      localStorage.setItem('cookie-consent', 'accepted');
+      document.getElementById('cookie-banner').style.display = 'none';
+      loadClarity();
+    }
+
+    function rejectCookies() {
+      localStorage.setItem('cookie-consent', 'rejected');
+      document.getElementById('cookie-banner').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var consent = localStorage.getItem('cookie-consent');
+      if (consent === 'accepted') {
+        loadClarity();
+      } else if (consent !== 'rejected') {
+        document.getElementById('cookie-banner').style.display = 'flex';
+      }
+    });
+  </script>
+</head>
+<body>
+  <!-- GDPR Cookie Banner -->
+  <div id="cookie-banner" class="cookie-banner" style="display: none;">
+    <p>本站使用 Cookie 和分析工具来改善用户体验。继续浏览即表示您同意我们的 <a href="{{ '/privacy' | relative_url }}">隐私政策</a>。</p>
+    <div class="cookie-buttons">
+      <button onclick="acceptCookies()" class="cookie-accept">接受</button>
+      <button onclick="rejectCookies()" class="cookie-reject">拒绝</button>
+    </div>
+  </div>
+  <header class="site-header">
+    <nav class="nav">
+      <a href="{{ '/' | relative_url }}" class="nav-title">{{ site.title }}</a>
+      <div class="nav-links">
+        <a href="{{ '/' | relative_url }}">首页</a>
+        <a href="{{ '/search' | relative_url }}">搜索</a>
+        <a href="{{ '/about' | relative_url }}">关于</a>
+        <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main animate-fade-in">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; {{ site.time | date: '%Y' }} {{ site.author }}</p>
+    </div>
+  </footer>
+</body>
+</html>
