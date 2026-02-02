@@ -218,15 +218,13 @@ body {
   width: 36px;
   height: 36px;
   background: transparent;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border: none;
   cursor: pointer;
   color: var(--color-text-secondary);
-  transition: all 0.2s;
+  transition: color 0.2s;
 }
 
 .theme-toggle:hover {
-  border-color: var(--color-accent);
   color: var(--color-accent);
 }
 
