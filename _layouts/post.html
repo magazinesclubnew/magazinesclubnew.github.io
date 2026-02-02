@@ -98,6 +98,36 @@ function copyLink() {
   });
 }
 
+// Reload busuanzi for accurate page view count (needed for View Transitions)
+(function() {
+  function reloadBusuanzi() {
+    const el = document.getElementById('busuanzi_value_page_pv');
+    if (el) el.textContent = '--';
+
+    const oldScript = document.querySelector('script[src*="busuanzi"]');
+    if (oldScript) oldScript.remove();
+
+    const script = document.createElement('script');
+    script.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+    script.async = true;
+    document.body.appendChild(script);
+  }
+
+  // Reload on page show (handles View Transitions and back/forward navigation)
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) reloadBusuanzi();
+  });
+
+  // Also reload after View Transition completes
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+      reloadBusuanzi();
+    }
+  }, { once: true });
+
+  reloadBusuanzi();
+})();
+
 // Reading progress bar
 (function() {
   const progressBar = document.querySelector('.reading-progress-bar');
