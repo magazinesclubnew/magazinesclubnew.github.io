@@ -203,17 +203,36 @@
         });
       }
 
+      function switchTheme(theme, event) {
+        const doSwitch = () => {
+          localStorage.setItem('theme', theme);
+          setActiveButton(theme);
+          applyTheme(theme);
+        };
+
+        // Use View Transitions API if available
+        if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          // Set origin point for circular animation
+          if (event) {
+            const x = event.clientX || window.innerWidth / 2;
+            const y = event.clientY || window.innerHeight / 2;
+            document.documentElement.style.setProperty('--theme-x', x + 'px');
+            document.documentElement.style.setProperty('--theme-y', y + 'px');
+          }
+          document.startViewTransition(doSwitch);
+        } else {
+          doSwitch();
+        }
+      }
+
       // Initialize from saved theme
       const saved = localStorage.getItem('theme') || 'system';
       setActiveButton(saved);
 
       // Handle button clicks
       buttons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          const theme = this.dataset.theme;
-          localStorage.setItem('theme', theme);
-          setActiveButton(theme);
-          applyTheme(theme);
+        btn.addEventListener('click', function(e) {
+          switchTheme(this.dataset.theme, e);
         });
       });
 
