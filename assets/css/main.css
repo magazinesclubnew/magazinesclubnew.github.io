@@ -212,16 +212,16 @@ body {
 
 /* Theme Toggle Button */
 .theme-toggle {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  padding: 0;
   background: transparent;
   border: none;
   cursor: pointer;
   color: var(--color-text-secondary);
   transition: color 0.2s;
+  vertical-align: middle;
 }
 
 .theme-toggle:hover {
