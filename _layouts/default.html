@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="view-transition" content="same-origin">
+  <meta name="theme-color" id="theme-color-meta" content="#fafafa">
   <link rel="icon" type="image/png" href="{{ '/assets/images/favicon.png' | relative_url }}">
   {% seo %}
 
-  <!-- Fonts: Noto Serif SC (editorial) + Noto Sans SC (body) -->
+  <!-- Fonts: Noto Serif SC (editorial) + Noto Sans SC (body) + IBM Plex Mono (code/dates) + Playfair Display (display titles) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
 
   <!-- KaTeX for Math -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -59,8 +60,10 @@
     (function() {
       const saved = localStorage.getItem('theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (saved === 'system' && prefersDark) || (!saved && prefersDark)) {
+      const isDark = saved === 'dark' || (saved === 'system' && prefersDark) || (!saved && prefersDark);
+      if (isDark) {
         document.documentElement.classList.add('dark');
+        document.getElementById('theme-color-meta').content = '#0d0d0d';
       }
     })();
   </script>
@@ -180,16 +183,28 @@
 
       function applyTheme(theme) {
         const html = document.documentElement;
+        const themeColorMeta = document.getElementById('theme-color-meta');
+        let isDark = false;
+
         if (theme === 'dark') {
           html.classList.add('dark');
+          isDark = true;
         } else if (theme === 'light') {
           html.classList.remove('dark');
+          isDark = false;
         } else {
           if (prefersDark.matches) {
             html.classList.add('dark');
+            isDark = true;
           } else {
             html.classList.remove('dark');
+            isDark = false;
           }
+        }
+
+        // Update browser theme-color
+        if (themeColorMeta) {
+          themeColorMeta.content = isDark ? '#0d0d0d' : '#fafafa';
         }
       }
 
@@ -243,6 +258,9 @@
           applyTheme('system');
         }
       });
+
+      // Initial theme-color update
+      applyTheme(saved);
     })();
   </script>
 </body>
