@@ -381,6 +381,14 @@ body {
   margin: 0 auto;
 }
 
+/* Offset article to balance TOC on large screens */
+@media (min-width: 1401px) {
+  .article {
+    margin-left: calc((100% - var(--content-width)) / 2 + 120px);
+    margin-right: auto;
+  }
+}
+
 /* Table of Contents */
 .toc-sidebar {
   position: fixed;
