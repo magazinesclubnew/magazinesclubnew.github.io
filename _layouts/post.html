@@ -14,7 +14,7 @@ layout: default
     {% if page.tags.size > 0 %}
     <div class="article-tags">
       {% for tag in page.tags %}
-      <a href="{{ '/tags/' | append: tag | append: '/' | relative_url }}" class="tag">{{ tag }}</a>
+      <a href="{{ '/tags/' | append: tag | append: '/' | relative_url }}" class="tag bg-cyan-500/10 dark:bg-cyan-400/15 hover:bg-cyan-500/20 dark:hover:bg-cyan-400/25">{{ tag }}</a>
       {% endfor %}
     </div>
     {% endif %}
