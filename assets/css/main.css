@@ -210,12 +210,11 @@ body {
   color: var(--color-accent);
 }
 
-/* Theme Toggle - Three-way Slider */
+/* Theme Toggle - Three-way Slider (openclaw style) */
 .theme-toggle {
-  --theme-item: 26px;
-  --theme-gap: 2px;
-  --theme-pad: 3px;
-  position: relative;
+  --theme-item: 32px;
+  --theme-gap: 4px;
+  --theme-pad: 4px;
 }
 
 .theme-toggle__track {
@@ -225,20 +224,25 @@ body {
   gap: var(--theme-gap);
   padding: var(--theme-pad);
   border-radius: 100px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: #e5e5e5;
+}
+
+.dark .theme-toggle__track {
+  background: #374151;
 }
 
 .theme-toggle__indicator {
   position: absolute;
-  top: 50%;
+  top: var(--theme-pad);
   left: var(--theme-pad);
   width: var(--theme-item);
   height: var(--theme-item);
   border-radius: 50%;
-  transform: translateY(-50%) translateX(calc(var(--theme-index, 0) * (var(--theme-item) + var(--theme-gap))));
+  transform: translateX(calc(var(--theme-index, 0) * (var(--theme-item) + var(--theme-gap))));
   background: var(--color-accent);
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
   z-index: 0;
 }
 
@@ -250,15 +254,23 @@ body {
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: var(--color-text-tertiary);
+  color: #6b7280;
   cursor: pointer;
   position: relative;
   z-index: 1;
-  transition: color 0.15s ease;
+  transition: color 0.2s ease;
 }
 
 .theme-toggle__btn:hover {
-  color: var(--color-text-secondary);
+  color: #374151;
+}
+
+.dark .theme-toggle__btn {
+  color: #9ca3af;
+}
+
+.dark .theme-toggle__btn:hover {
+  color: #d1d5db;
 }
 
 .theme-toggle__btn.active {
@@ -1532,40 +1544,22 @@ body {
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
+  animation-duration: 0.25s;
+  animation-timing-function: ease-out;
 }
 
 ::view-transition-old(root) {
-  z-index: 1;
+  animation-name: fade-out;
 }
 
 ::view-transition-new(root) {
-  z-index: 9999;
+  animation-name: fade-in;
 }
 
-/* Circular reveal animation from click origin */
-.dark::view-transition-old(root) {
-  z-index: 9999;
+@keyframes fade-out {
+  to { opacity: 0; }
 }
 
-.dark::view-transition-new(root) {
-  z-index: 1;
-}
-
-::view-transition-new(root) {
-  animation: theme-reveal 0.4s ease-out;
-}
-
-.dark::view-transition-old(root) {
-  animation: theme-reveal 0.4s ease-out;
-}
-
-@keyframes theme-reveal {
-  from {
-    clip-path: circle(0% at var(--theme-x, 50%) var(--theme-y, 50%));
-  }
-  to {
-    clip-path: circle(150% at var(--theme-x, 50%) var(--theme-y, 50%));
-  }
+@keyframes fade-in {
+  from { opacity: 0; }
 }
