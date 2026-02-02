@@ -18,9 +18,6 @@ layout: default
       {% endfor %}
     </div>
     {% endif %}
-    <div class="article-meta">
-      <span class="view-count"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> <span id="busuanzi_value_page_pv">--</span> 次阅读</span>
-    </div>
   </header>
 
   <div class="article-content prose">
@@ -97,36 +94,6 @@ function copyLink() {
     setTimeout(() => btn.classList.remove('copied'), 2000);
   });
 }
-
-// Reload busuanzi for accurate page view count (needed for View Transitions)
-(function() {
-  function reloadBusuanzi() {
-    const el = document.getElementById('busuanzi_value_page_pv');
-    if (el) el.textContent = '--';
-
-    const oldScript = document.querySelector('script[src*="busuanzi"]');
-    if (oldScript) oldScript.remove();
-
-    const script = document.createElement('script');
-    script.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
-    script.async = true;
-    document.body.appendChild(script);
-  }
-
-  // Reload on page show (handles View Transitions and back/forward navigation)
-  window.addEventListener('pageshow', function(e) {
-    if (e.persisted) reloadBusuanzi();
-  });
-
-  // Also reload after View Transition completes
-  document.addEventListener('visibilitychange', function() {
-    if (document.visibilityState === 'visible') {
-      reloadBusuanzi();
-    }
-  }, { once: true });
-
-  reloadBusuanzi();
-})();
 
 // Reading progress bar
 (function() {

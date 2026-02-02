@@ -416,25 +416,6 @@ body {
   margin-top: var(--space-5);
 }
 
-.article-meta {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  margin-top: var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--color-text-tertiary);
-}
-
-.view-count {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.view-count svg {
-  flex-shrink: 0;
-}
-
 .tag {
   display: inline-block;
   font-size: var(--text-sm);
