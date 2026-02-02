@@ -373,30 +373,25 @@ body {
    ============================================ */
 
 .article-wrapper {
-  display: grid;
-  grid-template-columns: 1fr minmax(0, var(--content-width)) 1fr;
-  gap: var(--space-8);
-  max-width: 1400px;
-  margin: 0 auto;
+  position: relative;
 }
 
 .article {
-  grid-column: 2;
   max-width: var(--content-width);
   margin: 0 auto;
 }
 
 /* Table of Contents */
 .toc-sidebar {
-  grid-column: 3;
-  position: relative;
+  position: fixed;
+  top: 100px;
+  right: calc((100vw - var(--content-width)) / 2 - 280px);
+  width: 220px;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
 }
 
 .toc-container {
-  position: sticky;
-  top: 100px;
-  max-height: calc(100vh - 150px);
-  overflow-y: auto;
   padding-right: var(--space-4);
 }
 
@@ -457,18 +452,9 @@ body {
 }
 
 /* Hide TOC on smaller screens */
-@media (max-width: 1200px) {
-  .article-wrapper {
-    display: block;
-  }
-
+@media (max-width: 1400px) {
   .toc-sidebar {
     display: none;
-  }
-
-  .article {
-    max-width: var(--content-width);
-    margin: 0 auto;
   }
 }
 
