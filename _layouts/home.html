@@ -10,12 +10,12 @@ layout: default
     </div>
     <div class="cards-grid">
       {% for post in site.posts %}
-      <article class="card animate-fade-in-up" style="opacity: 0; animation-delay: {{ forloop.index | times: 0.08 }}s;">
+      <article class="card">
         <a href="{{ post.url | relative_url }}" class="card-link">
           {% if post.tags.size > 0 %}
           <span class="card-tag">{{ post.tags | first }}</span>
           {% endif %}
-          <h2 class="card-title">{{ post.title }}</h2>
+          <h2 class="card-title" style="view-transition-name: post-title-{{ post.url | slugify }};">{{ post.title }}</h2>
           {% if post.subtitle %}
           <p class="card-subtitle">{{ post.subtitle }}</p>
           {% endif %}
@@ -31,3 +31,4 @@ layout: default
     </div>
   </section>
 </div>
+
