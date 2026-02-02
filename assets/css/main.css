@@ -470,13 +470,145 @@ body {
   border-bottom: 1px solid var(--color-border-light);
 }
 
+.article-meta-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
 .article-date {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   font-family: 'IBM Plex Mono', 'SF Mono', monospace;
   font-size: var(--text-sm);
   color: var(--color-text-tertiary);
-  margin-bottom: var(--space-4);
   letter-spacing: 0.02em;
+}
+
+.article-reading-time {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+.article-reading-time svg {
+  opacity: 0.7;
+}
+
+/* Reading Tools */
+.reading-tools {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  transition: all 0.2s;
+}
+
+.tool-btn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* Bookmark button */
+#bookmark-btn .icon-bookmark-filled {
+  display: none;
+}
+
+#bookmark-btn.bookmarked .icon-bookmark-outline {
+  display: none;
+}
+
+#bookmark-btn.bookmarked .icon-bookmark-filled {
+  display: block;
+  color: var(--color-accent);
+}
+
+#bookmark-btn.bookmarked {
+  border-color: var(--color-accent);
+}
+
+/* Font size controls */
+.font-size-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0 var(--space-1);
+}
+
+.font-size-controls .tool-btn {
+  border: none;
+  padding: var(--space-1);
+}
+
+.font-size-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  min-width: 2em;
+  text-align: center;
+}
+
+/* Continue reading banner */
+.continue-reading-banner {
+  position: fixed;
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  font-size: var(--text-sm);
+}
+
+.continue-reading-banner button {
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  transition: all 0.2s;
+}
+
+#continue-reading {
+  background: var(--color-accent);
+  color: white;
+}
+
+#continue-reading:hover {
+  background: var(--color-accent-hover);
+}
+
+#dismiss-banner {
+  background: transparent;
+  color: var(--color-text-tertiary);
+  padding: var(--space-1) var(--space-2);
+}
+
+#dismiss-banner:hover {
+  color: var(--color-text);
 }
 
 .article-title {

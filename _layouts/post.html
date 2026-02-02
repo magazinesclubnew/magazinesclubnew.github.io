@@ -18,12 +18,45 @@ layout: default
 
   <article class="article">
   <header class="article-header">
-    <time class="article-date" datetime="{{ page.date | date_to_xmlschema }}">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-      </svg>
-      {{ page.date | date: "%Y年%-m月%-d日" }}
-    </time>
+    <div class="article-meta-row">
+      <time class="article-date" datetime="{{ page.date | date_to_xmlschema }}">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+        </svg>
+        {{ page.date | date: "%Y年%-m月%-d日" }}
+      </time>
+      <span class="article-reading-time" id="reading-time">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <span id="reading-time-text">计算中...</span>
+      </span>
+    </div>
+
+    <!-- Reading Tools -->
+    <div class="reading-tools">
+      <button class="tool-btn" id="bookmark-btn" aria-label="收藏文章">
+        <svg class="icon-bookmark-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+        </svg>
+        <svg class="icon-bookmark-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+          <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <div class="font-size-controls">
+        <button class="tool-btn" id="font-decrease" aria-label="减小字体">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+          </svg>
+        </button>
+        <span class="font-size-label" id="font-size-label">字</span>
+        <button class="tool-btn" id="font-increase" aria-label="增大字体">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+        </button>
+      </div>
+    </div>
     <h1 class="article-title" style="view-transition-name: post-title-{{ page.url | slugify }};">{{ page.title }}</h1>
     {% if page.subtitle %}
     <p class="article-subtitle">{{ page.subtitle }}</p>
@@ -236,6 +269,159 @@ function copyLink() {
   });
 
   updateActiveLink();
+})();
+
+// Reading time estimation
+(function() {
+  const content = document.querySelector('.article-content');
+  const readingTimeText = document.getElementById('reading-time-text');
+  if (!content || !readingTimeText) return;
+
+  const text = content.textContent || '';
+  // Chinese: ~400 chars/min, English: ~200 words/min
+  const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
+  const minutes = Math.ceil(chineseChars / 400 + englishWords / 200);
+  readingTimeText.textContent = minutes + ' 分钟阅读';
+})();
+
+// Reading progress save & restore
+(function() {
+  const articleUrl = window.location.pathname;
+  const storageKey = 'reading-progress-' + articleUrl;
+
+  // Restore position
+  const saved = localStorage.getItem(storageKey);
+  if (saved) {
+    const data = JSON.parse(saved);
+    // Show continue reading prompt if progress > 10%
+    if (data.progress > 0.1 && data.progress < 0.95) {
+      const banner = document.createElement('div');
+      banner.className = 'continue-reading-banner';
+      banner.innerHTML = `
+        <span>上次阅读到 ${Math.round(data.progress * 100)}%</span>
+        <button id="continue-reading">继续阅读</button>
+        <button id="dismiss-banner">×</button>
+      `;
+      document.body.appendChild(banner);
+
+      document.getElementById('continue-reading').onclick = function() {
+        window.scrollTo({ top: data.scrollY, behavior: 'smooth' });
+        banner.remove();
+      };
+      document.getElementById('dismiss-banner').onclick = function() {
+        banner.remove();
+      };
+    }
+  }
+
+  // Save position on scroll
+  let saveTimeout;
+  window.addEventListener('scroll', function() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(function() {
+      const article = document.querySelector('.article');
+      if (!article) return;
+
+      const articleTop = article.getBoundingClientRect().top + window.scrollY;
+      const articleHeight = article.offsetHeight;
+      const windowHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+
+      const progress = Math.min(Math.max((scrollY - articleTop) / (articleHeight - windowHeight), 0), 1);
+
+      localStorage.setItem(storageKey, JSON.stringify({
+        scrollY: scrollY,
+        progress: progress,
+        timestamp: Date.now()
+      }));
+    }, 500);
+  }, { passive: true });
+})();
+
+// Bookmark/Favorite functionality
+(function() {
+  const btn = document.getElementById('bookmark-btn');
+  if (!btn) return;
+
+  const articleUrl = window.location.pathname;
+  const articleTitle = document.querySelector('.article-title')?.textContent || '';
+  const storageKey = 'bookmarked-articles';
+
+  function getBookmarks() {
+    return JSON.parse(localStorage.getItem(storageKey) || '[]');
+  }
+
+  function isBookmarked() {
+    return getBookmarks().some(b => b.url === articleUrl);
+  }
+
+  function updateUI() {
+    if (isBookmarked()) {
+      btn.classList.add('bookmarked');
+    } else {
+      btn.classList.remove('bookmarked');
+    }
+  }
+
+  btn.onclick = function() {
+    let bookmarks = getBookmarks();
+    if (isBookmarked()) {
+      bookmarks = bookmarks.filter(b => b.url !== articleUrl);
+      btn.classList.remove('bookmarked');
+    } else {
+      bookmarks.push({
+        url: articleUrl,
+        title: articleTitle,
+        timestamp: Date.now()
+      });
+      btn.classList.add('bookmarked');
+    }
+    localStorage.setItem(storageKey, JSON.stringify(bookmarks));
+  };
+
+  updateUI();
+})();
+
+// Font size adjustment
+(function() {
+  const decreaseBtn = document.getElementById('font-decrease');
+  const increaseBtn = document.getElementById('font-increase');
+  const label = document.getElementById('font-size-label');
+  const content = document.querySelector('.article-content');
+  if (!decreaseBtn || !increaseBtn || !content) return;
+
+  const sizes = [14, 16, 17, 18, 20, 22];
+  const defaultIndex = 2; // 17px
+  let currentIndex = parseInt(localStorage.getItem('font-size-index') || defaultIndex);
+
+  function applySize() {
+    content.style.fontSize = sizes[currentIndex] + 'px';
+    if (label) {
+      const diff = currentIndex - defaultIndex;
+      if (diff === 0) label.textContent = '字';
+      else if (diff > 0) label.textContent = '大'.repeat(diff);
+      else label.textContent = '小'.repeat(-diff);
+    }
+  }
+
+  decreaseBtn.onclick = function() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      localStorage.setItem('font-size-index', currentIndex);
+      applySize();
+    }
+  };
+
+  increaseBtn.onclick = function() {
+    if (currentIndex < sizes.length - 1) {
+      currentIndex++;
+      localStorage.setItem('font-size-index', currentIndex);
+      applySize();
+    }
+  };
+
+  applySize();
 })();
 
 </script>
