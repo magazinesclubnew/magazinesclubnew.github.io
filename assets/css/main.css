@@ -385,7 +385,7 @@ body {
 .toc-sidebar {
   position: fixed;
   top: 100px;
-  right: calc((100vw - var(--content-width)) / 2 - 280px);
+  left: calc((100vw - var(--content-width)) / 2 - 280px);
   width: 220px;
   max-height: calc(100vh - 150px);
   overflow-y: auto;
