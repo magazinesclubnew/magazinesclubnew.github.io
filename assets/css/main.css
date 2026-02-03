@@ -85,6 +85,7 @@ html {
   font-size: 17px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-y: scroll;
 }
 
 body {
@@ -231,11 +232,11 @@ body {
   color: var(--color-accent);
 }
 
-/* Theme Toggle - Three-way Slider (openclaw style) */
+/* Theme Toggle - Three-way Slider */
 .theme-toggle {
-  --theme-item: 32px;
-  --theme-gap: 4px;
-  --theme-pad: 4px;
+  --theme-item: 30px;
+  --theme-gap: 2px;
+  --theme-pad: 3px;
 }
 
 .theme-toggle__track {
@@ -245,11 +246,13 @@ body {
   gap: var(--theme-gap);
   padding: var(--theme-pad);
   border-radius: 100px;
-  background: #e5e5e5;
+  background: #f1f5f9;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .dark .theme-toggle__track {
-  background: #374151;
+  background: #1e293b;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .theme-toggle__indicator {
@@ -260,11 +263,16 @@ body {
   height: var(--theme-item);
   border-radius: 50%;
   transform: translateX(calc(var(--theme-index, 0) * (var(--theme-item) + var(--theme-gap))));
-  background: var(--color-accent);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform;
   z-index: 0;
+}
+
+.dark .theme-toggle__indicator {
+  background: #475569;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .theme-toggle__btn {
@@ -275,7 +283,7 @@ body {
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #6b7280;
+  color: #94a3b8;
   cursor: pointer;
   position: relative;
   z-index: 1;
@@ -283,19 +291,23 @@ body {
 }
 
 .theme-toggle__btn:hover {
-  color: #374151;
+  color: #64748b;
 }
 
 .dark .theme-toggle__btn {
-  color: #9ca3af;
+  color: #64748b;
 }
 
 .dark .theme-toggle__btn:hover {
-  color: #d1d5db;
+  color: #94a3b8;
 }
 
 .theme-toggle__btn.active {
-  color: white;
+  color: #334155;
+}
+
+.dark .theme-toggle__btn.active {
+  color: #e2e8f0;
 }
 
 .theme-icon {
@@ -1230,6 +1242,7 @@ body {
 .share-section {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-4);
   margin-top: var(--space-10);
   padding-top: var(--space-6);
@@ -1352,21 +1365,23 @@ body {
   object-fit: none;
 }
 
-/* Smooth cross-fade for page content */
+/* Smooth crossfade for page transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+  animation-timing-function: ease-in-out;
+}
+
 ::view-transition-old(root) {
-  animation: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) fade-out;
+  animation-name: none;
 }
 
 ::view-transition-new(root) {
-  animation: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) fade-in;
+  animation-name: crossfade-in;
+  mix-blend-mode: normal;
 }
 
-@keyframes fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-@keyframes fade-in {
+@keyframes crossfade-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }
@@ -1375,7 +1390,7 @@ body {
    Icon Utilities (Heroicons)
    ============================================ */
 
-/* Navigation Icons */
+/* Navigation Icons - Glossy Hover Effect */
 .nav-link-icon {
   display: inline-flex;
   align-items: center;
@@ -1383,15 +1398,60 @@ body {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
   text-decoration: none;
-  transition: color 0.2s;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--space-2);
+  position: relative;
+  transition: transform 0.25s, color 0.2s, background 0.2s;
 }
 
 .nav-link-icon:hover {
   color: var(--color-accent);
+  background: rgba(41, 166, 201, 0.08);
+  transform: translateY(-2px);
+}
+
+.dark .nav-link-icon:hover {
+  background: rgba(61, 189, 224, 0.1);
+}
+
+.nav-link-icon:active {
+  transform: translateY(0);
+  transition: transform 0.1s;
 }
 
 .nav-link-icon svg {
   flex-shrink: 0;
+  transition: transform 0.25s;
+}
+
+.nav-link-icon:hover svg {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+/* Shine effect on hover */
+.nav-link-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-position: 200% 0;
+  opacity: 0;
+  transition: opacity 0.3s, background-position 0.5s;
+  pointer-events: none;
+}
+
+.nav-link-icon:hover::before {
+  opacity: 1;
+  background-position: -200% 0;
 }
 
 /* Card metadata with icons */
@@ -1622,30 +1682,4 @@ body {
     gap: var(--space-4);
     padding: var(--space-4);
   }
-}
-
-/* ============================================
-   View Transitions - Theme Switch Animation
-   ============================================ */
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.25s;
-  animation-timing-function: ease-out;
-}
-
-::view-transition-old(root) {
-  animation-name: fade-out;
-}
-
-::view-transition-new(root) {
-  animation-name: fade-in;
-}
-
-@keyframes fade-out {
-  to { opacity: 0; }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; }
 }
