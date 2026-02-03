@@ -182,10 +182,9 @@ function copyLink() {
   if (!content || !tocNav) return;
 
   // Get all headings
-  const headings = content.querySelectorAll('h2, h3');
+  const headings = Array.from(content.querySelectorAll('h2, h3'));
 
   if (headings.length < 2) {
-    // Hide TOC if less than 2 headings
     if (tocSidebar) tocSidebar.style.display = 'none';
     return;
   }
@@ -193,7 +192,6 @@ function copyLink() {
   // Generate IDs and build TOC
   const tocItems = [];
   headings.forEach((heading, index) => {
-    // Generate ID if not exists
     if (!heading.id) {
       heading.id = 'heading-' + index;
     }
@@ -209,13 +207,10 @@ function copyLink() {
     tocItems.push({ el: heading, link: item });
   });
 
-  // Scroll spy
+  // Scroll spy - highlight active heading in TOC
   let ticking = false;
-
   function updateActiveLink() {
-    const scrollY = window.scrollY;
-    const offset = 100; // Offset from top
-
+    const offset = 100;
     let activeIndex = 0;
 
     for (let i = 0; i < tocItems.length; i++) {
@@ -243,6 +238,8 @@ function copyLink() {
     }
   }, { passive: true });
 
+  updateActiveLink();
+
   // Smooth scroll on click
   tocNav.addEventListener('click', function(e) {
     if (e.target.classList.contains('toc-link')) {
@@ -255,8 +252,6 @@ function copyLink() {
       }
     }
   });
-
-  updateActiveLink();
 })();
 
 // Reading time estimation
