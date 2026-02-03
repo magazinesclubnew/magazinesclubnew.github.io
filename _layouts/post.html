@@ -13,6 +13,12 @@ layout: default
         目录
       </h4>
       <nav class="toc-nav" id="toc-nav"></nav>
+      <div class="toc-complete" id="toc-complete">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <span>阅读完成！</span>
+      </div>
     </div>
   </aside>
 
@@ -178,6 +184,7 @@ function copyLink() {
   const content = document.querySelector('.article-content');
   const tocNav = document.getElementById('toc-nav');
   const tocSidebar = document.getElementById('toc-sidebar');
+  const tocComplete = document.getElementById('toc-complete');
 
   if (!content || !tocNav) return;
 
@@ -237,6 +244,25 @@ function copyLink() {
         behavior: 'smooth'
       });
       lastActiveIndex = activeIndex;
+    }
+
+    // Show completion message when reaching the last section
+    if (tocComplete && activeIndex === tocItems.length - 1) {
+      const article = document.querySelector('.article');
+      const articleBottom = article.getBoundingClientRect().bottom;
+      const windowHeight = window.innerHeight;
+      // Show when near the bottom of the article
+      if (articleBottom <= windowHeight + 100) {
+        if (!tocComplete.classList.contains('show')) {
+          tocComplete.classList.add('show');
+          // Scroll TOC to show completion message
+          setTimeout(() => {
+            tocComplete.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }, 100);
+        }
+      }
+    } else if (tocComplete) {
+      tocComplete.classList.remove('show');
     }
 
     ticking = false;
