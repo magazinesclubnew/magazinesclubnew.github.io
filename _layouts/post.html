@@ -209,6 +209,8 @@ function copyLink() {
 
   // Scroll spy - highlight active heading in TOC
   let ticking = false;
+  let lastActiveIndex = -1;
+
   function updateActiveLink() {
     const offset = 100;
     let activeIndex = 0;
@@ -227,6 +229,15 @@ function copyLink() {
         item.link.classList.remove('active');
       }
     });
+
+    // Scroll TOC to keep active item in view
+    if (activeIndex !== lastActiveIndex && tocItems[activeIndex]) {
+      tocItems[activeIndex].link.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth'
+      });
+      lastActiveIndex = activeIndex;
+    }
 
     ticking = false;
   }
