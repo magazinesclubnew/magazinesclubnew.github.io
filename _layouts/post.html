@@ -1,0 +1,677 @@
+---
+layout: default
+---
+<div class="reading-progress-bar"></div>
+<div class="article-wrapper">
+  <!-- TOC Sidebar -->
+  <aside class="toc-sidebar" id="toc-sidebar">
+    <div class="toc-container">
+      <h4 class="toc-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+        </svg>
+        目录
+      </h4>
+      <nav class="toc-nav" id="toc-nav"></nav>
+      <div class="toc-complete" id="toc-complete">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <span>阅读完成！</span>
+      </div>
+    </div>
+  </aside>
+
+  <article class="article">
+  <header class="article-header">
+    <div class="article-meta-row">
+      <time class="article-date" datetime="{{ page.date | date_to_xmlschema }}">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+        </svg>
+        {{ page.date | date: "%Y年%-m月%-d日" }}
+      </time>
+      <span class="article-reading-time" id="reading-time">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <span id="reading-time-text">计算中...</span>
+      </span>
+      <div class="font-size-controls">
+        <button class="tool-btn" id="font-decrease" aria-label="减小字体">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+          </svg>
+        </button>
+        <span class="font-size-label" id="font-size-label">字</span>
+        <button class="tool-btn" id="font-increase" aria-label="增大字体">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <h1 class="article-title" style="view-transition-name: post-title-{{ page.url | slugify }};">{{ page.title }}</h1>
+    {% if page.subtitle %}
+    <p class="article-subtitle">{{ page.subtitle }}</p>
+    {% endif %}
+    {% if page.tags.size > 0 %}
+    <div class="article-tags">
+      {% for tag in page.tags %}
+      <a href="{{ '/tags/' | append: tag | append: '/' | relative_url }}" class="tag">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="14" height="14">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+        </svg>
+        {{ tag }}
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- AI Summary -->
+    <div class="ai-summary" id="ai-summary">
+      <button class="ai-summary-trigger" id="ai-summary-trigger">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
+        </svg>
+        <span>AI 智能总结</span>
+      </button>
+      <div class="ai-summary-content" id="ai-summary-content">
+        <div>
+          <div class="ai-summary-content-inner" id="ai-summary-inner"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="article-content prose">
+    {{ content }}
+  </div>
+
+  <!-- Social Sharing -->
+  <div class="share-section">
+    <span class="share-label">分享到</span>
+    <div class="share-buttons">
+      <a href="https://twitter.com/intent/tweet?text={{ page.title | url_encode }}&url={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener" class="share-btn twitter" aria-label="分享到 Twitter">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener" class="share-btn facebook" aria-label="分享到 Facebook">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="https://service.weibo.com/share/share.php?url={{ page.url | absolute_url | url_encode }}&title={{ page.title | url_encode }}" target="_blank" rel="noopener" class="share-btn weibo" aria-label="分享到微博">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443zM9.05 17.219c-.384.616-1.208.884-1.829.602-.612-.279-.793-.991-.406-1.593.379-.595 1.176-.861 1.793-.601.622.263.82.972.442 1.592zm1.27-1.627c-.141.237-.449.353-.689.253-.236-.09-.313-.361-.177-.586.138-.227.436-.346.672-.24.239.09.315.36.194.573zm.176-2.719c-1.893-.493-4.033.45-4.857 2.118-.836 1.704-.026 3.591 1.886 4.21 1.983.64 4.318-.341 5.132-2.179.8-1.793-.201-3.642-2.161-4.149zm7.563-1.224c-.346-.105-.579-.18-.405-.649.381-1.017.422-1.896-.001-2.521-.791-1.163-2.956-1.098-5.449-.034 0 0-.779.34-.58-.271.387-1.217.325-2.236-.275-2.823-.812-.791-2.979-.279-4.846 1.127-1.386 1.043-2.197 2.165-2.197 3.131 0 .929.597 1.563 1.574 1.774 2.071.447 4.832-.223 6.583-1.659.167-.138.323-.043.15.17-.685.849-1.492 1.372-2.266 1.663.638.116 1.35.127 2.139-.058 1.619-.381 2.881-1.533 2.881-1.533.218-.185.328-.084.164.139-.653.889-1.535 1.526-2.5 1.914.875.071 1.776.002 2.693-.243 3.249-.867 5.321-3.103 5.321-5.696 0-.159 0-.32-.011-.479-.413.24-.9.444-1.444.6z"/></svg>
+      </a>
+      <button class="share-btn copy-link" onclick="copyLink()" aria-label="复制链接">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Related Posts -->
+  {% assign related_posts = "" | split: "" %}
+  {% for tag in page.tags %}
+    {% for post in site.tags[tag] %}
+      {% if post.url != page.url %}
+        {% unless related_posts contains post %}
+          {% assign related_posts = related_posts | push: post %}
+        {% endunless %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+  {% assign related_posts = related_posts | slice: 0, 3 %}
+
+  {% if related_posts.size > 0 %}
+  <div class="related-posts">
+    <h3 class="related-title">相关文章</h3>
+    <div class="related-list">
+      {% for post in related_posts %}
+      <a href="{{ post.url | relative_url }}" class="related-item">
+        <span class="related-item-title">{{ post.title }}</span>
+        {% if post.subtitle %}<span class="related-item-subtitle">{{ post.subtitle }}</span>{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <footer class="article-footer">
+    {% if page.previous.url %}
+    <a href="{{ page.previous.url | relative_url }}" class="nav-link prev">
+      <span class="nav-label">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+        </svg>
+        上一篇
+      </span>
+      <span class="nav-title">{{ page.previous.title }}</span>
+    </a>
+    {% endif %}
+    {% if page.next.url %}
+    <a href="{{ page.next.url | relative_url }}" class="nav-link next">
+      <span class="nav-label">
+        下一篇
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </span>
+      <span class="nav-title">{{ page.next.title }}</span>
+    </a>
+    {% endif %}
+  </footer>
+  </article>
+</div>
+
+<!-- Text Selection Menu -->
+<div class="selection-menu" id="selection-menu">
+  <button class="selection-menu-btn" id="sel-copy">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+    </svg>
+    <span>复制</span>
+  </button>
+  <div class="selection-menu-divider"></div>
+  <button class="selection-menu-btn" id="sel-twitter">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <span>推文</span>
+  </button>
+  <button class="selection-menu-btn" id="sel-weibo">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443z"/></svg>
+    <span>微博</span>
+  </button>
+</div>
+
+<script>
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const btn = document.querySelector('.copy-link');
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 2000);
+  });
+}
+
+// Reading progress bar
+(function() {
+  const progressBar = document.querySelector('.reading-progress-bar');
+  const article = document.querySelector('.article');
+
+  function updateProgress() {
+    const articleRect = article.getBoundingClientRect();
+    const articleTop = articleRect.top + window.scrollY;
+    const articleHeight = article.offsetHeight;
+    const windowHeight = window.innerHeight;
+    const scrollY = window.scrollY;
+
+    const start = articleTop;
+    const end = articleTop + articleHeight - windowHeight;
+    const progress = Math.min(Math.max((scrollY - start) / (end - start), 0), 1);
+
+    progressBar.style.transform = `scaleX(${progress})`;
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+})();
+
+// Table of Contents
+(function() {
+  const content = document.querySelector('.article-content');
+  const tocNav = document.getElementById('toc-nav');
+  const tocSidebar = document.getElementById('toc-sidebar');
+  const tocComplete = document.getElementById('toc-complete');
+
+  if (!content || !tocNav) return;
+
+  // Get all headings
+  const headings = Array.from(content.querySelectorAll('h2, h3'));
+
+  if (headings.length < 2) {
+    if (tocSidebar) tocSidebar.style.display = 'none';
+    return;
+  }
+
+  // Generate IDs and build TOC
+  const tocItems = [];
+  headings.forEach((heading, index) => {
+    if (!heading.id) {
+      heading.id = 'heading-' + index;
+    }
+
+    const level = heading.tagName.toLowerCase();
+    const item = document.createElement('a');
+    item.href = '#' + heading.id;
+    item.className = 'toc-link toc-' + level;
+    item.textContent = heading.textContent;
+    item.dataset.target = heading.id;
+
+    tocNav.appendChild(item);
+    tocItems.push({ el: heading, link: item });
+  });
+
+  // Scroll spy - highlight active heading in TOC
+  let ticking = false;
+  let lastActiveIndex = -1;
+
+  function updateActiveLink() {
+    const offset = 100;
+    let activeIndex = 0;
+
+    for (let i = 0; i < tocItems.length; i++) {
+      const rect = tocItems[i].el.getBoundingClientRect();
+      if (rect.top <= offset) {
+        activeIndex = i;
+      }
+    }
+
+    tocItems.forEach((item, index) => {
+      if (index === activeIndex) {
+        item.link.classList.add('active');
+      } else {
+        item.link.classList.remove('active');
+      }
+    });
+
+    // Scroll TOC to keep active item in view
+    if (activeIndex !== lastActiveIndex && tocItems[activeIndex]) {
+      tocItems[activeIndex].link.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth'
+      });
+      lastActiveIndex = activeIndex;
+    }
+
+    // Show completion message when reaching the last section
+    if (tocComplete && activeIndex === tocItems.length - 1) {
+      const article = document.querySelector('.article');
+      const articleBottom = article.getBoundingClientRect().bottom;
+      const windowHeight = window.innerHeight;
+      // Show when near the bottom of the article
+      if (articleBottom <= windowHeight + 100) {
+        if (!tocComplete.classList.contains('show')) {
+          tocComplete.classList.add('show');
+          // Scroll TOC to show completion message
+          setTimeout(() => {
+            tocComplete.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }, 100);
+        }
+      }
+    } else if (tocComplete) {
+      tocComplete.classList.remove('show');
+    }
+
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(updateActiveLink);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  updateActiveLink();
+
+  // Smooth scroll on click
+  tocNav.addEventListener('click', function(e) {
+    if (e.target.classList.contains('toc-link')) {
+      e.preventDefault();
+      const targetId = e.target.dataset.target;
+      const target = document.getElementById(targetId);
+      if (target) {
+        const top = target.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+  });
+})();
+
+// Reading time estimation
+(function() {
+  const content = document.querySelector('.article-content');
+  const readingTimeText = document.getElementById('reading-time-text');
+  if (!content || !readingTimeText) return;
+
+  const text = content.textContent || '';
+  // Chinese: ~400 chars/min, English: ~200 words/min
+  const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
+  const minutes = Math.ceil(chineseChars / 400 + englishWords / 200);
+  readingTimeText.textContent = minutes + ' 分钟阅读';
+})();
+
+// Reading progress save & restore
+(function() {
+  const articleUrl = window.location.pathname;
+  const storageKey = 'reading-progress-' + articleUrl;
+
+  // Restore position
+  const saved = localStorage.getItem(storageKey);
+  if (saved) {
+    const data = JSON.parse(saved);
+    // Show continue reading prompt if progress > 10%
+    if (data.progress > 0.1 && data.progress < 0.95) {
+      const banner = document.createElement('div');
+      banner.className = 'continue-reading-banner';
+      banner.innerHTML = `
+        <span>上次阅读到 ${Math.round(data.progress * 100)}%</span>
+        <button id="continue-reading">继续阅读</button>
+        <button id="dismiss-banner">×</button>
+      `;
+      document.body.appendChild(banner);
+
+      document.getElementById('continue-reading').onclick = function() {
+        window.scrollTo({ top: data.scrollY, behavior: 'smooth' });
+        banner.remove();
+      };
+      document.getElementById('dismiss-banner').onclick = function() {
+        banner.remove();
+      };
+    }
+  }
+
+  // Save position on scroll
+  let saveTimeout;
+  window.addEventListener('scroll', function() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(function() {
+      const article = document.querySelector('.article');
+      if (!article) return;
+
+      const articleTop = article.getBoundingClientRect().top + window.scrollY;
+      const articleHeight = article.offsetHeight;
+      const windowHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+
+      const progress = Math.min(Math.max((scrollY - articleTop) / (articleHeight - windowHeight), 0), 1);
+
+      localStorage.setItem(storageKey, JSON.stringify({
+        scrollY: scrollY,
+        progress: progress,
+        timestamp: Date.now()
+      }));
+    }, 500);
+  }, { passive: true });
+})();
+
+// Font size adjustment
+(function() {
+  const decreaseBtn = document.getElementById('font-decrease');
+  const increaseBtn = document.getElementById('font-increase');
+  const label = document.getElementById('font-size-label');
+  const content = document.querySelector('.article-content');
+  if (!decreaseBtn || !increaseBtn || !content) return;
+
+  const sizes = [14, 16, 17, 18, 20, 22];
+  const defaultIndex = 2; // 17px
+  let currentIndex = parseInt(localStorage.getItem('font-size-index') || defaultIndex);
+
+  function applySize() {
+    content.style.fontSize = sizes[currentIndex] + 'px';
+    if (label) {
+      const diff = currentIndex - defaultIndex;
+      if (diff === 0) label.textContent = '字';
+      else if (diff > 0) label.textContent = '大'.repeat(diff);
+      else label.textContent = '小'.repeat(-diff);
+    }
+  }
+
+  decreaseBtn.onclick = function() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      localStorage.setItem('font-size-index', currentIndex);
+      applySize();
+    }
+  };
+
+  increaseBtn.onclick = function() {
+    if (currentIndex < sizes.length - 1) {
+      currentIndex++;
+      localStorage.setItem('font-size-index', currentIndex);
+      applySize();
+    }
+  };
+
+  applySize();
+})();
+
+// AI Summary
+(function() {
+  const WORKER_URL = 'https://diary-chatbot.diary-chatbot.workers.dev';
+  const trigger = document.getElementById('ai-summary-trigger');
+  const content = document.getElementById('ai-summary-content');
+  const inner = document.getElementById('ai-summary-inner');
+  const summaryBox = document.getElementById('ai-summary');
+  const articleContent = document.querySelector('.article-content');
+
+  if (!trigger || !content || !inner || !articleContent) return;
+
+  // Store initial width for animation
+  let initialWidth = null;
+
+  const showSummary = () => {
+    if (!initialWidth) {
+      initialWidth = summaryBox.offsetWidth + 'px';
+    }
+    // Set explicit width first, then animate to 100%
+    summaryBox.style.width = initialWidth;
+    summaryBox.offsetHeight; // Force reflow
+    summaryBox.classList.add('expanded');
+    content.classList.add('show');
+  };
+
+  const hideSummary = () => {
+    summaryBox.classList.remove('expanded');
+    content.classList.remove('show');
+    // After transition, reset to auto width
+    setTimeout(() => {
+      if (!summaryBox.classList.contains('expanded')) {
+        summaryBox.style.width = '';
+      }
+    }, 400);
+  };
+
+  // Check cache
+  const cacheKey = 'ai-summary-' + window.location.pathname;
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) {
+    inner.innerHTML = cached;
+    showSummary();
+    trigger.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" />
+      </svg>
+      <span>AI 总结</span>
+    `;
+  }
+
+  let isLoading = false;
+
+  trigger.addEventListener('click', async function() {
+    if (isLoading) return;
+
+    // If already has content, toggle visibility
+    if (content.classList.contains('show')) {
+      hideSummary();
+      return;
+    }
+
+    // If cached, just show
+    if (cached) {
+      showSummary();
+      return;
+    }
+
+    // Generate summary
+    isLoading = true;
+    trigger.classList.add('loading');
+    summaryBox.classList.add('expanded');
+    trigger.innerHTML = `
+      <span class="ai-loading-dots"><span></span><span></span><span></span></span>
+      <span>正在生成...</span>
+    `;
+
+    try {
+      const text = articleContent.textContent.trim().slice(0, 8000);
+      const response = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{
+            role: 'user',
+            content: `请用中文为以下文章写一个简洁的总结，3-5句话，突出核心观点：\n\n${text}`
+          }]
+        }),
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      inner.innerHTML = data.reply;
+      showSummary();
+      localStorage.setItem(cacheKey, data.reply);
+
+      trigger.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" />
+        </svg>
+        <span>AI 总结</span>
+      `;
+    } catch (error) {
+      inner.innerHTML = '生成总结时出错，请稍后再试。';
+      showSummary();
+      trigger.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" />
+        </svg>
+        <span>重试</span>
+      `;
+      console.error('AI Summary error:', error);
+    }
+
+    isLoading = false;
+    trigger.classList.remove('loading');
+  });
+})();
+
+// Text Selection Menu
+(function() {
+  const menu = document.getElementById('selection-menu');
+  const articleContent = document.querySelector('.article-content');
+
+  if (!menu || !articleContent) return;
+
+  let selectedText = '';
+  let isMenuVisible = false;
+
+  // Show menu near selection
+  function showMenu(x, y) {
+    const menuWidth = 220;
+    const menuHeight = 48;
+    const padding = 10;
+
+    // Adjust position to stay within viewport
+    let left = x - menuWidth / 2;
+    let top = y - menuHeight - 10;
+
+    if (left < padding) left = padding;
+    if (left + menuWidth > window.innerWidth - padding) {
+      left = window.innerWidth - menuWidth - padding;
+    }
+    if (top < padding) {
+      top = y + 20; // Show below if no space above
+    }
+
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
+    menu.classList.add('show');
+    isMenuVisible = true;
+  }
+
+  function hideMenu() {
+    menu.classList.remove('show');
+    isMenuVisible = false;
+  }
+
+  // Handle text selection
+  function handleSelection() {
+    const selection = window.getSelection();
+    const text = selection.toString().trim();
+
+    if (text.length > 5 && articleContent.contains(selection.anchorNode)) {
+      selectedText = text;
+      const range = selection.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      // Use viewport coordinates directly since menu is position:fixed
+      showMenu(rect.left + rect.width / 2, rect.top);
+    } else if (isMenuVisible) {
+      // Small delay to allow clicking menu buttons
+      setTimeout(() => {
+        if (!menu.matches(':hover')) {
+          hideMenu();
+        }
+      }, 150);
+    }
+  }
+
+  // Desktop: mouseup
+  document.addEventListener('mouseup', handleSelection);
+
+  // Mobile: use selectionchange with delay for better support
+  let selectionTimeout;
+  document.addEventListener('selectionchange', function() {
+    clearTimeout(selectionTimeout);
+    selectionTimeout = setTimeout(handleSelection, 300);
+  });
+
+  // Hide menu on click/tap outside
+  document.addEventListener('mousedown', function(e) {
+    if (!menu.contains(e.target)) {
+      hideMenu();
+    }
+  });
+  document.addEventListener('touchstart', function(e) {
+    if (!menu.contains(e.target)) {
+      // Delay to allow button tap to register
+      setTimeout(hideMenu, 100);
+    }
+  }, { passive: true });
+
+  // Copy button
+  document.getElementById('sel-copy').addEventListener('click', function() {
+    navigator.clipboard.writeText(selectedText).then(() => {
+      this.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+        <span>已复制</span>
+      `;
+      setTimeout(() => {
+        this.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+          </svg>
+          <span>复制</span>
+        `;
+        hideMenu();
+      }, 1500);
+    });
+  });
+
+  // Twitter share
+  document.getElementById('sel-twitter').addEventListener('click', function() {
+    const text = selectedText.slice(0, 250) + (selectedText.length > 250 ? '...' : '');
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent('"' + text + '"')}&url=${encodeURIComponent(window.location.href)}`;
+    window.open(url, '_blank', 'width=550,height=420');
+    hideMenu();
+  });
+
+  // Weibo share
+  document.getElementById('sel-weibo').addEventListener('click', function() {
+    const text = selectedText.slice(0, 250) + (selectedText.length > 250 ? '...' : '');
+    const url = `https://service.weibo.com/share/share.php?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent('"' + text + '"')}`;
+    window.open(url, '_blank', 'width=550,height=420');
+    hideMenu();
+  });
+})();
+
+</script>

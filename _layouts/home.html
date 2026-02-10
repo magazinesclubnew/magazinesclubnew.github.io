@@ -1,0 +1,47 @@
+---
+layout: default
+---
+<div class="home">
+  <h1 class="sr-only">{{ site.title }} - {{ site.description }}</h1>
+  <section class="cards-section">
+    <div class="section-header">
+      <span class="section-title">最新文章</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="cards-grid">
+      {% for post in site.posts %}
+      <article class="card{% if post.image %} has-image{% endif %}">
+        <a href="{{ post.url | relative_url }}" class="card-link">
+          {% if post.image %}
+          <div class="card-image">
+            <img src="{{ post.image | relative_url }}" alt="{{ post.title }}" loading="lazy">
+          </div>
+          {% endif %}
+          <div class="card-content">
+            {% if post.tags.size > 0 %}
+            <span class="card-tag">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="14" height="14">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+              </svg>
+              {{ post.tags | first }}
+            </span>
+            {% endif %}
+            <h2 class="card-title" style="view-transition-name: post-title-{{ post.url | slugify }};">{{ post.title }}</h2>
+            {% if post.subtitle %}
+            <p class="card-subtitle">{{ post.subtitle }}</p>
+            {% endif %}
+            <time class="card-date" datetime="{{ post.date | date_to_xmlschema }}">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="14" height="14">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+              </svg>
+              {{ post.date | date: "%Y年%-m月%-d日" }}
+            </time>
+          </div>
+        </a>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+

@@ -1,0 +1,55 @@
+title: 日迹
+description: 随笔、想法与探索
+author: 日迹
+baseurl: ""
+url: "https://magazinesclubnew.github.io"
+lang: zh-CN
+
+# SEO settings
+twitter:
+  card: summary_large_image
+social:
+  name: Author
+logo: /assets/images/logo.png
+image: /assets/images/og-default.jpg
+google_site_verification: 4Bu75qWGbxtSnMeI9QilGy5MDl2UJyBw6qFIuJTblNM
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  math_engine: mathjax
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - node_modules
+  - worker
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:year/:month/:day/:title/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
