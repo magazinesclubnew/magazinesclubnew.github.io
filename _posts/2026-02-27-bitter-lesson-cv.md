@@ -5,6 +5,7 @@ subtitle: "Vincent Sitzmann 论 3D 表征的消亡与具身智能的未来"
 date: 2026-02-27
 tags: [计算机视觉, 具身智能, 世界模型]
 description: "MIT 教授 Vincent Sitzmann 认为传统计算机视觉正在走向终结——3D 表征、相机位姿乃至视觉本身，都将被端到端的感知-行动循环所吞噬"
+image: /assets/images/posts/2026-02-27-bitter-lesson-cv.png
 ---
 
 > 原文：[The Flavor of the Bitter Lesson for Computer Vision](https://www.vincentsitzmann.com/blog/bitter_lesson_of_cv/)
